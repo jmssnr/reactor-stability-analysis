@@ -3,7 +3,7 @@ export const rungeKuttaIntegration = (
   tspan: [number, number],
   fun: (x: number[]) => number[]
 ) => {
-  const stepSize = 0.0125;
+  const stepSize = 0.00125;
   const deltaTime = tspan[1] - tspan[0];
   const numberSteps = deltaTime / stepSize;
 
