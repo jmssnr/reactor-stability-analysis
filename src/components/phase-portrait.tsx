@@ -6,18 +6,19 @@ import { Group } from "@visx/group";
 import { Point } from "@visx/point";
 import { scaleLinear } from "@visx/scale";
 import { Line, LinePath } from "@visx/shape";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 const MARGIN = { top: 35, left: 35, right: 35, bottom: 35 };
 
 const PhasePortrait = (props: {
   width: number;
   height: number;
+  initial: number[];
+  setInitial: Dispatch<SetStateAction<number[]>>;
   model: (x: number[]) => number[];
 }) => {
-  const [initial, setInitial] = useState([1.2, 0]);
   const [isDragging, setIsDragging] = useState(false);
-  const { width, height, model } = props;
+  const { width, height, model, initial, setInitial } = props;
 
   const innerWidth = width - MARGIN.left - MARGIN.right;
   const innerHeight = height - MARGIN.top - MARGIN.bottom;
@@ -34,8 +35,8 @@ const PhasePortrait = (props: {
 
   const states = rungeKuttaIntegration(initial, [0, 15], model);
 
-  const grid = yScale.ticks(30).map((row) =>
-    xScale.ticks(30).map((col) => {
+  const grid = yScale.ticks(50).map((row) =>
+    xScale.ticks(50).map((col) => {
       const [dx, dy] = model([col, row]);
 
       const length = 50 * Math.sqrt(dx ** 2 + dy ** 2);
@@ -88,14 +89,6 @@ const PhasePortrait = (props: {
       stroke={"#f24391"}
       strokeWidth={2}
     />
-  );
-
-  const stationaryPoints = (
-    <Group>
-      <circle cx={xScale(1.0699)} cy={yScale(0.0345)} r={5} fill="#f24391" />
-      <circle cx={xScale(1.2867)} cy={yScale(0.4338)} r={5} fill="#f24391" />
-      <circle cx={xScale(1.5416)} cy={yScale(0.9033)} r={5} fill="#f24391" />
-    </Group>
   );
 
   return (
@@ -173,7 +166,6 @@ const PhasePortrait = (props: {
         </Group>
         {line}
         {initialCircle}
-        {stationaryPoints}
       </Group>
     </svg>
   );
