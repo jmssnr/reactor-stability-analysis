@@ -1,11 +1,13 @@
 "use client";
+import { getHeatGenerationCurve, getHeatReleased } from "@/core/reactor-model";
 import { rungeKuttaIntegration } from "@/core/runge-kutta-integration";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { localPoint } from "@visx/event";
 import { Group } from "@visx/group";
 import { Point } from "@visx/point";
 import { scaleLinear } from "@visx/scale";
-import { Line, LinePath } from "@visx/shape";
+import { LinePath } from "@visx/shape";
+import * as motion from "motion/react-client";
 import { Dispatch, SetStateAction, useState } from "react";
 
 const MARGIN = { top: 35, left: 35, right: 35, bottom: 35 };
@@ -16,9 +18,21 @@ const PhasePortrait = (props: {
   initial: number[];
   setInitial: Dispatch<SetStateAction<number[]>>;
   model: (x: number[]) => number[];
+  tau: number;
+  stanton: number;
+  bodenstein: number;
 }) => {
   const [isDragging, setIsDragging] = useState(false);
-  const { width, height, model, initial, setInitial } = props;
+  const {
+    width,
+    height,
+    model,
+    initial,
+    setInitial,
+    tau,
+    stanton,
+    bodenstein,
+  } = props;
 
   const innerWidth = width - MARGIN.left - MARGIN.right;
   const innerHeight = height - MARGIN.top - MARGIN.bottom;
@@ -35,23 +49,61 @@ const PhasePortrait = (props: {
 
   const states = rungeKuttaIntegration(initial, [0, 15], model);
 
-  const grid = yScale.ticks(50).map((row) =>
-    xScale.ticks(50).map((col) => {
+  const heatRel = getHeatReleased(stanton, bodenstein);
+  const heatGen = getHeatGenerationCurve(tau);
+
+  const heatGenLine = (
+    <LinePath
+      data={heatGen}
+      x={(d) => xScale(d.theta)}
+      y={(d) => yScale(d.conversion)}
+      stroke={"blue"}
+      strokeWidth={2}
+    />
+  );
+
+  const heatReleasedLine = (
+    <LinePath
+      data={heatRel}
+      x={(d) => xScale(d.theta)}
+      y={(d) => yScale(d.conversion)}
+      stroke={"blue"}
+      strokeWidth={2}
+    />
+  );
+
+  const grid = yScale.ticks(30).map((row) =>
+    xScale.ticks(40).map((col) => {
       const [dx, dy] = model([col, row]);
 
-      const length = 50 * Math.sqrt(dx ** 2 + dy ** 2);
-
-      if (length === 0) return;
+      const length = 200; //70 * Math.sqrt(dx ** 2 + dy ** 2);
 
       return (
-        <Group key={`${row}-${col}`} opacity={0.2}>
-          <circle cx={xScale(col)} cy={yScale(row)} r={2} fill="#98A7C0" />
-          <Line
+        <Group key={`${row}-${col}`} opacity={0.6}>
+          {/* <circle cx={xScale(col)} cy={yScale(row)} r={2} fill="#98A7C0" /> */}
+
+          <motion.line
+            x1={xScale(col)}
+            y1={yScale(row)}
+            x2={xScale(col + dx / length)}
+            y2={yScale(row + dy / length)}
+            fill={"transparent"}
+            stroke="#98A7C0"
+            animate={{
+              pathLength: [0, 1],
+              opacity: [1, 0.5],
+              // pathLength: [0, 1, 0],
+            }}
+            // initial={{ pathLength: 0.001, opacity: 0 }}
+            // animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ repeat: Infinity, duration: 1, type: "tween" }}
+          />
+          {/* <Line
             from={{ x: xScale(col), y: yScale(row) }}
             to={{ x: xScale(col + dx / length), y: yScale(row + dy / length) }}
             stroke="#98A7C0"
             markerEnd="url(#arrow)"
-          />
+          /> */}
         </Group>
       );
     })
@@ -166,6 +218,8 @@ const PhasePortrait = (props: {
         </Group>
         {line}
         {initialCircle}
+        {heatGenLine}
+        {heatReleasedLine}
       </Group>
     </svg>
   );

@@ -1,10 +1,11 @@
+"use client";
+
 import { Card } from "@/components/ui/card";
 import { rungeKuttaIntegration } from "@/core/runge-kutta-integration";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { Group } from "@visx/group";
 import { scaleLinear } from "@visx/scale";
 import { LinePath } from "@visx/shape";
-
 const MARGIN = { top: 35, left: 35, right: 35, bottom: 35 };
 
 const LineChart = (props: {
@@ -19,7 +20,7 @@ const LineChart = (props: {
 
   const timeScale = scaleLinear({
     range: [0, innerWidth],
-    domain: [0, 15],
+    domain: [0, 20],
   });
 
   const yScale = scaleLinear({
@@ -27,7 +28,7 @@ const LineChart = (props: {
     domain: [0, 2],
   });
 
-  const x = rungeKuttaIntegration(initial, [0, 15], model);
+  const x = rungeKuttaIntegration(initial, [0, 20], model);
 
   const lines = (
     <Group>
@@ -35,14 +36,14 @@ const LineChart = (props: {
         data={x}
         y={(d) => yScale(d.states[0])}
         x={(d) => timeScale(d.time)}
-        stroke={"green"}
+        className="stroke-chart-1"
         strokeWidth={2}
       />
       <LinePath
         data={x}
         y={(d) => yScale(d.states[1])}
         x={(d) => timeScale(d.time)}
-        stroke={"red"}
+        className="stroke-chart-2"
         strokeWidth={2}
       />
     </Group>
