@@ -1,3 +1,6 @@
+![Example](/app-example.png)
+--
+
 # About 
 
 Stability analysis of a continously stirred tank reactor with an exothermic first order reaction. 
@@ -29,5 +32,3 @@ t' = \frac{t}{\tau},
 $$
 
 where $\tau$ is the residence time, $k_0$ is the pre-exponential factor, $E_\mathrm{A}$ is the activation energy, $R$ is the universal gas constant, $T_\mathrm{in}$ is the inlet temperature, $U$ is the heat transfer coefficient, $A$ is the jacket surface area, $\dot V$ is the volumetric flow rate, $\rho$ is the density, $c_\mathrm{p}$ is the heat capacity, $\Delta H$ is the reaction enthalpy, $c_\mathrm{in}$ is the inlet concentration, and $T_\mathrm{c}$ is the coolant temperature.
-
-![Example](/app-example.png)
