@@ -1,11 +1,11 @@
 "use client";
 
 import PhasePortrait from "@/components/phase-portrait";
-import { scaledLotkaVolterraModel } from "@/core/lotka-volterra-model";
+import { reactorModel } from "@/core/reactor-model";
 import { ParentSize } from "@visx/responsive";
 
 export default function Home() {
-  const model = scaledLotkaVolterraModel(5);
+  const model = reactorModel();
   return (
     <main className="w-screen h-screen bg-black p-6">
       <ParentSize>
