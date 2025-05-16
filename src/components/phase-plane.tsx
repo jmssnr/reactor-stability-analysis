@@ -108,7 +108,7 @@ const PhasePlane = (props: {
     xScale.ticks(20).map((col) => {
       const [dx, dy] = model([col, row])
 
-      const length = 20; //70 * Math.sqrt(dx ** 2 + dy ** 2);
+      const length = 20;
 
       return (
         <Group key={`${row}-${col}`} opacity={1}>
