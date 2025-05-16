@@ -1,8 +1,10 @@
+import { SimulationResult } from "@/core/types";
+
 export const rungeKuttaIntegration = (
   x0: number[],
   tspan: [number, number],
   fun: (x: number[]) => number[]
-) => {
+): SimulationResult => {
   const stepSize = 0.00125;
   const deltaTime = tspan[1] - tspan[0];
   const numberSteps = deltaTime / stepSize;

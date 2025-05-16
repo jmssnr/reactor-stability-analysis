@@ -1,36 +1,16 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+#About 
 
-## Getting Started
+Stability analysis of a continously stirred tank reactor with an exothermic first order reaction. 
 
-First, run the development server:
+The governing model equations are the mass and energy balances expressed via the reactant conversion $X$ and the normalized temperature $\theta$
+$$
+\frac{\mathrm{d}X}{\mathrm{d}t'} = - X + \mathrm{DaI}(\theta) (1-X)
+$$
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+$$
+\frac{\mathrm{d}\theta}{\mathrm{d}t'} = 1-\theta + B \mathrm{DaI}(\theta) (1-X) + \mathrm{St} (\theta_\mathrm{c} - \theta)
+$$
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+with $\mathrm{DaI} = \tau k_0 \exp\left(- \frac{E_\mathrm{A}}{R T_\mathrm{in} \theta} \right)$ as the Damköhler number of the first kind, $\mathrm{St} = \frac{U A}{\dot{V} \rho c_\mathrm{p}}$ as the Stanton number, $B = \frac{(-\Delta H) c_\mathrm{in}}{T_\mathrm{in} \rho c_\mathrm{p}}$, $\theta_\mathrm{c} = \frac{T_\mathrm{c}}{T_\mathrm{in}}$ and $t' = \frac{t}{\tau}$.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+![Example]("app-example.png")
